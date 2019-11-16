@@ -9,7 +9,7 @@
 
 				<div class="list-group">
 					<a href="#" class="list-group-item list-group-item-action active">
-						Generales
+							{{ __('General Settings') }}
 					</a>
 
 					<a href="#" class="list-group-item list-group-item-action">
@@ -26,69 +26,36 @@
 		<div class="col-md-9">
 			<div class="card">
 				<div class="card-header">
-					Ajustes generales
+					{{ __('General Settings') }}
 				</div>
 
 				<div class="card-body">
-					<p>
-						{{ 
-						__(
-							"Hello :name, you have :unread messages", 
-							['name' => 'raul']
-							) 
-						}}
-					</p>
-					<p>
-						@lang('auth.failed')
-					</p>
-
-					<form class="modal-content d-none" method="POST" action="{{ route('settings.update',$user['id']) }}">
-						@csrf
-						@method('PUT')
-						<div class="modal-header">
-							<h5 class="modal-title">
-								Edit
-							</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<div class="form-group row">
-								<label for="prueba" class="col-md-4 col-form-label">{{ __('prueba') }}</label>
-
-								<div class="col-md-6">
-									<input id="prueba" type="text" class="form-control @error('prueba') is-invalid @enderror"
-										name="prueba" value="" autofocus autocomplete="off">
-
-									@error('prueba')
-									<span class="invalid-feedback" role="alert">
-										<strong>
-											$message
-											{{ __(	$message, 
-															['name' => 'attribute', 'number' => 'min' ]
-														) 
-											}}
-										</strong>
-									</span>
-									@enderror
-								</div>
-							</div>
-
-						</div>
-						<div class="modal-footer">
-							<button type="submit" class="btn btn-primary">Save changes</button>
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">
-								Cancel
-							</button>
-						</div>
-					</form>
 
 					@include('components/session-alerts/success')
 					@include('components/session-alerts/error')
 
 					<table class="table">
 						<tbody>
+							<tr>
+								<th scope="row">
+									Avatar
+								</th>
+								<td>
+									@if ($user['avatar']['icon'])
+										<img src="{{ Storage::url('img/u/'. $user['id']. '/avatars/'. $user['avatar']['icon'] ) }}"
+											class="img-fluid rounded-circle" width="55px" alt="{{$user['username']}}">
+									@else
+										<img src="{{ Storage::url('img/u/default/avatars/48.png' ) }}"
+											class="img-fluid rounded-circle" width="48px" alt="{{$user['username']}}">
+									@endif									
+								</td>
+								<td>
+									<button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+										data-target="#modalUpdateAvatar">
+										{{ __('Edit') }}
+									</button>
+								</td>
+							</tr>
 							<tr>
 								<th scope="row">
 									Name
@@ -99,7 +66,7 @@
 								<td>
 									<button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
 										data-target="#modalUpdateName">
-										Edit
+										{{ __('Edit') }}
 									</button>
 								</td>
 							</tr>
@@ -113,7 +80,7 @@
 								<td>
 									<button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
 										data-target="#modalUpdateUsername">
-										Edit
+										{{ __('Edit') }}
 									</button>
 								</td>
 							</tr>
@@ -127,7 +94,7 @@
 								<td>
 									<button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
 										data-target="#modalUpdateEmail">
-										Edit
+										{{ __('Edit') }}
 									</button>
 								</td>
 							</tr>
@@ -142,7 +109,7 @@
 								<td>
 									<button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
 										data-target="#modalUpdateNewPassword">
-										Edit
+										{{ __('Edit') }}
 									</button>
 								</td>
 							</tr>
@@ -151,6 +118,71 @@
 					</table>
 
 					<!-- Modals Update -->
+					<!-- #/modalUpdateName -->
+					<div class="modal fade" id="modalUpdateAvatar" tabindex="-1" role="dialog" aria-labelledby="modalUpdateAvatar"
+						aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered" role="document">
+
+							<form class="modal-content" method="POST" action="{{ route('settings.avatarUpload',$user['id']) }}"
+								enctype="multipart/form-data">
+								@csrf
+								@method('PUT')
+								<div class="modal-header">
+									<h5 class="modal-title">
+										{{ __('Edit') }}
+									</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<div class="form-group row">
+										<label for="avatar" class="col-md-3 col-form-label">{{ __('Avatar') }}</label>
+
+										<div class="col-md-9">
+
+											<input type="file" class="form-control 
+											@error('avatar') is-invalid @enderror" name="avatar" required autofocus>
+
+											@error('avatar')
+											<span class="invalid-feedback" role="alert">
+												<strong>
+													$message
+													{{ __( $message ) 
+											}}
+												</strong>
+											</span>
+											@enderror
+										</div>
+
+									</div>
+
+								</div>
+								<div class="modal-footer">
+									@if ($user['avatar'])
+										<a class="btn btn-danger" href="{{ route('settings.avatarDelete',$user['id']) }}"
+												onclick="event.preventDefault();
+												document.getElementById('form-avatarDelete').submit();">
+								 			{{ __('Delete') }}
+								 		</a>
+									@endif
+									<button type="submit" class="btn btn-primary">{{ __('Save changes') }}</button>
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">
+										{{ __('Cancel') }}
+									</button>
+								</div>
+							</form>
+
+							<form id="form-avatarDelete" class="d-none"
+										action="{{ route('settings.avatarDelete',$user['id']) }}" method="POST">
+								@csrf
+								@method('PUT')
+							</form>
+
+						</div>
+					</div>
+					<!-- #/modalUpdateName -->
+
 					<!-- #/modalUpdateName -->
 					<div class="modal fade" id="modalUpdateName" tabindex="-1" role="dialog"
 						aria-labelledby="modalUpdateNameTitle" aria-hidden="true">
@@ -161,7 +193,7 @@
 								@method('PUT')
 								<div class="modal-header">
 									<h5 class="modal-title" id="modalUpdateNameTitle">
-										Edit
+										{{ __('Edit') }}
 									</h5>
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 										<span aria-hidden="true">&times;</span>
@@ -177,7 +209,7 @@
 
 											@error('name')
 											<span class="invalid-feedback" role="alert">
-												<strong>	{{ __($message) }}	</strong>
+												<strong> {{ __($message) }} </strong>
 											</span>
 											@enderror
 										</div>
@@ -192,7 +224,7 @@
 
 											@error('password')
 											<span class="invalid-feedback" role="alert">
-												<strong>	{{ __($message) }}	</strong>
+												<strong> {{ __($message) }} </strong>
 											</span>
 											@enderror
 										</div>
@@ -200,9 +232,9 @@
 
 								</div>
 								<div class="modal-footer">
-									<button type="submit" class="btn btn-primary">Save changes</button>
+									<button type="submit" class="btn btn-primary">{{ __('Save changes') }}</button>
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">
-										Cancel
+										{{ __('Cancel') }}
 									</button>
 								</div>
 							</form>
@@ -220,7 +252,7 @@
 								@method('PUT')
 								<div class="modal-header">
 									<h5 class="modal-title">
-										Edit
+										{{ __('Edit') }}
 									</h5>
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 										<span aria-hidden="true">&times;</span>
@@ -236,7 +268,7 @@
 
 											@error('username')
 											<span class="invalid-feedback" role="alert">
-												<strong>	
+												<strong>
 													{{ __($message) }}
 												</strong>
 											</span>
@@ -261,9 +293,9 @@
 
 								</div>
 								<div class="modal-footer">
-									<button type="submit" class="btn btn-primary">Save changes</button>
+									<button type="submit" class="btn btn-primary">{{ __('Save changes') }}</button>
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">
-										Cancel
+										{{ __('Cancel') }}
 									</button>
 								</div>
 							</form>
@@ -281,7 +313,7 @@
 								@method('PUT')
 								<div class="modal-header">
 									<h5 class="modal-title">
-										Edit
+										{{ __('Edit') }}
 									</h5>
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 										<span aria-hidden="true">&times;</span>
@@ -297,7 +329,7 @@
 
 											@error('email')
 											<span class="invalid-feedback" role="alert">
-												<strong>	{{ __($message) }}	</strong>
+												<strong> {{ __($message) }} </strong>
 											</span>
 											@enderror
 										</div>
@@ -312,7 +344,7 @@
 
 											@error('password')
 											<span class="invalid-feedback" role="alert">
-												<strong>	{{ __($message) }}	</strong>
+												<strong> {{ __($message) }} </strong>
 											</span>
 											@enderror
 										</div>
@@ -320,9 +352,9 @@
 
 								</div>
 								<div class="modal-footer">
-									<button type="submit" class="btn btn-primary">Save changes</button>
+									<button type="submit" class="btn btn-primary">{{ __('Save changes') }}</button>
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">
-										Cancel
+										{{ __('Cancel') }}
 									</button>
 								</div>
 							</form>
@@ -340,7 +372,7 @@
 								@method('PUT')
 								<div class="modal-header">
 									<h5 class="modal-title">
-										Edit
+										{{ __('Edit') }}
 									</h5>
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 										<span aria-hidden="true">&times;</span>
@@ -357,14 +389,14 @@
 
 											@error('new_password')
 											<span class="invalid-feedback" role="alert">
-												<strong>	{{ __($message) }}	</strong>
+												<strong> {{ __($message) }} </strong>
 											</span>
 											@enderror
 										</div>
 									</div>
 
 									<div class="form-group row">
-										<label for="password" class="col-md-4 col-form-label">{{ __('Current Actual') }}</label>
+										<label for="password" class="col-md-4 col-form-label">{{ __('Current password') }}</label>
 
 										<div class="col-md-6">
 											<input type="password" class="form-control @error('password') is-invalid @enderror"
@@ -372,7 +404,7 @@
 
 											@error('password')
 											<span class="invalid-feedback" role="alert">
-												<strong>	{{ __($message) }}	</strong>
+												<strong> {{ __($message) }} </strong>
 											</span>
 											@enderror
 										</div>
@@ -380,9 +412,9 @@
 
 								</div>
 								<div class="modal-footer">
-									<button type="submit" class="btn btn-primary">Save changes</button>
+									<button type="submit" class="btn btn-primary">{{ __('Save changes') }}</button>
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">
-										Cancel
+										{{ __('Cancel') }}
 									</button>
 								</div>
 							</form>

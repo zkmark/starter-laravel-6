@@ -60,6 +60,15 @@
 	"The password field is required." : "El campo de contraseña es obligatorio.",
 
 	"The new_password must be at least 8 characters.": "El nuevo password debe tener al menos 8 caracteres.",
-	"The new_password field is required." : "El nuevo password es obligatorio."
+	"The new_password field is required." : "El nuevo password es obligatorio.",
+
+	"New Password": "Nueva Contraseña",
+	"Current password": "Contraseña actual",
+	"Delete": "Eliminar",
+	"Save changes": "Guardar Cambios",
+	"Edit": "Editar",
+	"Cancel": "Cancelar",
+	"Settings" : "Ajustes",
+	"General Settings": "Ajustes Generales"
 
 }

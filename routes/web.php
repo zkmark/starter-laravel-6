@@ -19,28 +19,36 @@ Route::get('/', function () {
 
 Route::group(['middleware'=>'language'],function (){
 	
+	//Guest
+
 	Route::get('/', function () {
     return view('welcome');
 	});
 
+	//Auth
 	Auth::routes();
 
+	//User
+	Route::get('/home', 'HomeController@index')->name('home');
+
+	
+	//Auth
+	Route::group(['middleware'=>'auth'],function (){
+
+		//settings
+		Route::get('settings', 'User\UserSettingsController@index')->name('settings');
+		Route::put('settings/{id}', 'User\UserSettingsController@update')->name('settings.update');
+		Route::put('settings/avatar_upload/{id}', 'User\UserSettingsController@avatarUpload')
+		->name('settings.avatarUpload');
+		Route::put('settings/avatar_delete/{id}', 'User\UserSettingsController@avatarDelete')
+		->name('settings.avatarDelete');
+		
+		Route::get('settings/{id}/edit', 'User\UserSettingsController@edit')->name('settings.edit');
+	});
 	
 });
 
 
-Route::get('/home', 'HomeController@index')->name('home');
-
-
-
-Route::get('settings', 'User\UserSettingsController@index')->name('settings');
-
-
-Route::get('settings/{id}/edit', 'User\UserSettingsController@edit')->name('settings.edit');
-
-Route::put('settings/{id}', 'User\UserSettingsController@update')->name('settings.update');
-
-//Route::resource('/settings', 'User\UserSettingsController');
 
 Route::get('setlocale/{locale}',function($lang){
 	//\Session::put('locale',$lang);

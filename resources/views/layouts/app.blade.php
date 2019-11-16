@@ -18,6 +18,8 @@
 
 	<!-- Styles -->
 	<link href="{{ asset('css/app.css') }}" rel="stylesheet">
+	@yield('styles')
+
 </head>
 <body>
 	<div id="app">
@@ -77,6 +79,8 @@
 						@else
 							<li class="nav-item dropdown">
 								<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+									<img src="{{ Storage::url('img/u/'. $user['id']. '/avatars/'. $user['avatar']['icon'] ) }}"
+									class="img-fluid rounded-circle" width="21px" alt="{{$user['username']}}">	
 									{{ Auth::user()->name }} <span class="caret"></span>
 								</a>
 
@@ -107,5 +111,7 @@
 			@yield('content')
 		</main>
 	</div>
+
+	@yield('scripts')
 </body>
 </html>
