@@ -24,13 +24,13 @@ Laravel is accessible, powerful, and provides tools required for large, robust a
 ## About Starter Laravel 6
 It includes
 
-Bootstrap 4
+- Bootstrap 4
 
-Auth
+- Auth
 
-Avatar
+- Avatar
 
-Language English and Spanish
+- Language English and Spanish
 
 
 ## Learning Laravel
