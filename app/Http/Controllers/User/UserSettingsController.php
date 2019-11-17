@@ -8,11 +8,8 @@ use Illuminate\Http\Request;
 use App\User;
 use Redirect;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
-//use App;
-use Illuminate\Support\Facades\Storage;
 use App\Traits\UploadTrait;
-use Intervention\Image\Facades\Image;
+
 
 class UserSettingsController extends Controller
 {
@@ -215,7 +212,7 @@ class UserSettingsController extends Controller
 	public function avatarUpload(Request $request, $id){
 
 		$validator = Validator::make($request->all(), [
-			'name' => ['required', 'image'],
+			'avatar' => ['required', 'image'],
 		]);
 		if($validator->fails()){
 			return Redirect::to('settings')
