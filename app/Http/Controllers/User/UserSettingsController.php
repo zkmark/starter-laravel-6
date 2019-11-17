@@ -23,10 +23,7 @@ class UserSettingsController extends Controller
 	{
 
 		$the_user = auth()->user();
-		$the_avatars = [
-			'icon' 	=> 	'avatar_x32',
-			'xs'		=>	'avatar_x256'
-		];
+		
 		$user = [
 			'id' 				=> $the_user->id,
 			'name' 			=> $the_user->name,
@@ -36,33 +33,13 @@ class UserSettingsController extends Controller
 			'avatar'		=> json_decode($the_user->avatar, true)
 		];
 
-
-		/*
-		$avatar_sizes  = json_decode($the_user->avatar, true);
-		$this->deleteAvatars(  $the_user->id, $avatar_sizes );
-		*/
-	
-
-		//dd($user['name']);
 		return view('user/settings/settings-profile', compact('user'));
 
 	}
 
-	public function change_lang($lang){
-		if(in_array($lang,['en','es','fa'])){
-			session(['locale'=> $lang]);
-		}
-		return back();
-	}
-
-	public function edit($id){
-
-		dd($user);
-	}
 
 	public function update(Request $request, $id){
 
-		/*
 		$user_id;
 		$validator = Validator::make($request->all(), [
 				'password' => 'required|password',
@@ -81,53 +58,10 @@ class UserSettingsController extends Controller
 							->with('error','Error! verify your data');
 			}
 		}
-		*/
+		
 
 		$user_id = auth()->user()->id;
-
-
-
-		/*
-		if ($request->hasFile('avatar')) {
-			$file = $request->file('avatar');
-			$name_img = 'avatar'. '.'. $file->getClientOriginalExtension();
-
-			$file->move(public_path().'/images/', $name_img);
-			return $name_img;
-		}
-		*/
 		
-
-		
-		// Check if a profile image has been uploaded
-		if ($request->has('avatar')) {
-
-			$img = $request->file('avatar');
-			$img_type =	$img->getClientOriginalExtension();
-
-			$avatar_sizes = [
-				'icon' 	=>	'48',
-				'xs'		=>	'192'
-			];
-
-			$this->uploadAvatars($request->file('avatar'), $user_id, $avatar_sizes);
-
-			foreach ($avatar_sizes as $key => $value) {
-				$avatar_sizes[$key] = $value . '.'. $img_type;
-			}
-			
-			$user = User::findOrFail($user_id);
-			$update = ['avatar' => json_encode($avatar_sizes)];
-			$user->update($update);
-			
-			//Storage::disk('public')->delete('img/u/'.$user_id. '/avatars/'. $name_img);
-
-			return $avatar_sizes;
-		}
-		
-
-
-		/*
 		if( $request->name){
 
 			$validator = Validator::make($request->all(), [
@@ -150,9 +84,7 @@ class UserSettingsController extends Controller
 			}
       
 		}
-		*/
-
-		/*
+		
 		//request
 		if( $request->name){
 
@@ -243,15 +175,60 @@ class UserSettingsController extends Controller
 			}
 
 		}//new_password
-		*/
+		
+
+	}
+
+
+	public function changeLang(Request $request, $id){
+
+		//dd($request);
+		if( $request->lang){
+
+			$validator = Validator::make($request->all(), [
+				'lang' => ['required', 'string', 'min:2', 'max:255'],
+			]);
+
+			if($validator->fails()){
+				return Redirect::to('settings')
+							->with('error','Error! verify your Language')
+							->withErrors($validator)
+							->withInput();
+			}
+			else{
+				//User logeed
+				$user_id = auth()->user()->id;
+
+				$user = User::findOrFail($user_id);
+				$update = ['lang' => $request->lang];
+				$user->update($update);
+
+				return Redirect::to('settings')
+      			->with('success','Great! updated successfully');
+			}
+      
+		}
+
 
 	}
 
 	public function avatarUpload(Request $request, $id){
+
+		$validator = Validator::make($request->all(), [
+			'name' => ['required', 'image'],
+		]);
+		if($validator->fails()){
+			return Redirect::to('settings')
+						->with('error','Error your avatar must be a valid image')
+						->withErrors($validator)
+						->withInput();
+		}
+
+		//Id of user logged
 		$user_id = auth()->user()->id;
 
 		// Check if a profile image has been uploaded
-		if ($request->has('avatar')) {
+		if ($request->has('avatar') && $request->file('avatar')) {
 
 			$img = $request->file('avatar');
 			$img_type =	$img->getClientOriginalExtension();
@@ -271,13 +248,14 @@ class UserSettingsController extends Controller
 			$update = ['avatar' => json_encode($avatar_sizes)];
 			$user->update($update);
 			
-			//Storage::disk('public')->delete('img/u/'.$user_id. '/avatars/'. $name_img);
-
 			// Success
 			return Redirect::to('settings')
 			->with('success','Great! updated successfully');
 		}
-		
+		else{
+			return Redirect::to('settings')
+			->with('error','Avatar upload failed');
+		}
 
 	}
 	
@@ -307,13 +285,7 @@ class UserSettingsController extends Controller
 		
 
 	}
-
-	/*
-		Todo:
-		Upload avatar ny form
-		Delete avatar
- 		TRasnlation of other pages, btn or form change url for translation
-	*/
 	
+	//Add lang database
 
 }

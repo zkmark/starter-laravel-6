@@ -21,11 +21,18 @@ class LanguageSwitcher
     public function handle($request, Closure $next)
     {
 			
-      if (!Session::has('locale')){
-        Session::put('locale',Config::get('app.locale'));
-      }
-      App::setLocale(session('locale'));
-			return $next($request);
+			if (auth()->user()->lang) {
+				Session::put('locale', auth()->user()->lang);
+				App::setLocale(session('locale'));
+				return $next($request);
+			}
+			else{
+				if (!Session::has('locale')){
+					Session::put('locale',Config::get('app.locale'));
+				}
+				App::setLocale(session('locale'));
+				return $next($request);
+			}
 			 
 		}
 		

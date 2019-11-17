@@ -69,6 +69,19 @@
 	"Edit": "Editar",
 	"Cancel": "Cancelar",
 	"Settings" : "Ajustes",
-	"General Settings": "Ajustes Generales"
+	"General Settings": "Ajustes Generales",
+	"Error your avatar must be a valid image": "Error tu avatar deber ser una imagen valida",
+	"Great! updated successfully": "¡Excelente! actualizado con éxito",
+	"Avatar upload failed": "Fallo el Avatar al subirse",
+	"Error! verify your name": "¡Error! verifica tu nombre",
+	"Error! verify your new password": "¡Error! verifica tu nueva contraseña",
+	"Error! verify your username": "¡Error! verifica tu username",
+	"Error! verify your email": "¡Error! verifica tu email",
+	"Language": "Idioma",
+	
+	"lang_es": "Español",
+	"lang_en": "Ingles"
+
+
 
 }

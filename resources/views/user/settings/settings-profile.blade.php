@@ -30,7 +30,7 @@
 				</div>
 
 				<div class="card-body">
-
+					
 					@include('components/session-alerts/success')
 					@include('components/session-alerts/error')
 
@@ -98,7 +98,20 @@
 									</button>
 								</td>
 							</tr>
-
+							<tr>
+								<th scope="row">
+									{{ __('Language') }}
+								</th>
+								<td>
+									{{ __('lang_'.$g_user->lang) }}
+								</td>
+								<td>
+									<button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+										data-target="#modalUpdateLang">
+										{{ __('Edit') }}
+									</button>
+								</td>
+							</tr>
 							<tr>
 								<th scope="row">
 									Password
@@ -118,7 +131,7 @@
 					</table>
 
 					<!-- Modals Update -->
-					<!-- #/modalUpdateName -->
+					<!-- #/modalUpdateAvatar -->
 					<div class="modal fade" id="modalUpdateAvatar" tabindex="-1" role="dialog" aria-labelledby="modalUpdateAvatar"
 						aria-hidden="true">
 						<div class="modal-dialog modal-dialog-centered" role="document">
@@ -147,9 +160,7 @@
 											@error('avatar')
 											<span class="invalid-feedback" role="alert">
 												<strong>
-													$message
-													{{ __( $message ) 
-											}}
+													$message	{{ __( $message ) }}
 												</strong>
 											</span>
 											@enderror
@@ -181,7 +192,67 @@
 
 						</div>
 					</div>
-					<!-- #/modalUpdateName -->
+					<!-- #/modalUpdateAvatar -->
+
+					<!-- #/modalUpdateLang -->
+					<div class="modal fade" id="modalUpdateLang" tabindex="-1" role="dialog" aria-labelledby="modalUpdateLang"
+						aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered" role="document">
+
+							<form class="modal-content" method="POST" action="{{ route('settings.changeLang',$user['id']) }}">
+								@csrf
+								@method('PUT')
+								<div class="modal-header">
+									<h5 class="modal-title">
+										{{ __('Edit') }}
+									</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<div class="form-group row">
+										<label for="lang" class="col-md-3 col-form-label">{{ __('Language') }}</label>
+
+										<div class="col-md-9">
+
+											<select class="custom-select @error('lang') is-invalid @enderror"
+															 name="lang" id="lang" required autofocus>
+												<option disabled>Select Language</option>
+
+												<!-- $langs on AppServiceProvider -->
+												@foreach ($langs as $key => $value)
+													<option value="{{ $value }}" {{ ( $value == $g_user->lang) ? 'selected' : '' }}> 
+														{{ __('lang_'. $value ) }} 
+													</option>
+												@endforeach
+												
+											</select>
+
+											@error('lang')
+											<span class="invalid-feedback" role="alert">
+												<strong>
+													$message
+													{{ __( $message ) }}
+												</strong>
+											</span>
+											@enderror
+										</div>
+
+									</div>
+
+								</div>
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-primary">{{ __('Save changes') }}</button>
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">
+										{{ __('Cancel') }}
+									</button>
+								</div>
+							</form>
+
+						</div>
+					</div>
+					<!-- #/modalUpdateLang -->
 
 					<!-- #/modalUpdateName -->
 					<div class="modal fade" id="modalUpdateName" tabindex="-1" role="dialog"

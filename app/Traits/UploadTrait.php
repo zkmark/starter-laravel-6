@@ -44,7 +44,6 @@ trait UploadTrait{
 
 	public function deleteAvatars($user_id, $avatar_sizes){
 
-		
 		foreach ($avatar_sizes as $key => $value) {
 
 			$img_name = $avatar_sizes[$key];

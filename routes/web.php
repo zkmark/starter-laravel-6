@@ -42,6 +42,9 @@ Route::group(['middleware'=>'language'],function (){
 		->name('settings.avatarUpload');
 		Route::put('settings/avatar_delete/{id}', 'User\UserSettingsController@avatarDelete')
 		->name('settings.avatarDelete');
+
+		Route::put('settings/changeLang/{id}', 'User\UserSettingsController@changeLang')
+		->name('settings.changeLang');
 		
 		Route::get('settings/{id}/edit', 'User\UserSettingsController@edit')->name('settings.edit');
 	});
