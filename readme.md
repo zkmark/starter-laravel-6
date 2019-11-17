@@ -26,7 +26,7 @@ Laravel is accessible, powerful, and provides tools required for large, robust a
 
 - Bootstrap 4
 - Auth
-- Avatar
+- Avatar (code for link of storage files: php artisan storage:link)
 - Language English and Spanish
 
 
