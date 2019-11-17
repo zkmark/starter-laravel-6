@@ -22,14 +22,11 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
 ## About Starter Laravel 6
-**It includes
+**It includes**
 
 - Bootstrap 4
-
 - Auth
-
 - Avatar
-
 - Language English and Spanish
 
 
